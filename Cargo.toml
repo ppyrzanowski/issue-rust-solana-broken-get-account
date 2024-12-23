@@ -1,0 +1,70 @@
+[package]
+name = "test-rust-solana-get-account"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+solana-account-decoder = { path = "../../Repos/agave/account-decoder" }
+solana-rpc-client-api = { path = "../../Repos/agave/rpc-client-api" }
+solana-rpc-client = { path = "../../Repos/agave/rpc-client" }
+solana-sdk = { path = "../../Repos/agave/sdk" }
+
+serde = "1.0.216"
+serde_json = "1.0.134"
+reqwest = { features = ["blocking", "brotli", "deflate", "gzip", "rustls-tls", "json"], version = "0.12.9" }
+
+
+[patch.crates-io]
+# for details, see https://github.com/anza-xyz/crossbeam/commit/fd279d707025f0e60951e429bf778b4813d1b6bf
+# crossbeam-epoch = { git = "https://github.com/anza-xyz/crossbeam", rev = "fd279d707025f0e60951e429bf778b4813d1b6bf" }
+
+# We include the following crates as our dependencies above from crates.io:
+#
+#  * spl-associated-token-account
+#  * spl-instruction-padding
+#  * spl-memo
+#  * spl-pod
+#  * spl-token
+#  * spl-token-2022
+#  * spl-token-metadata-interface
+#
+# They, in turn, depend on a number of crates that we also include directly
+# using `path` specifications.  For example, `spl-token` depends on
+# `solana-program`.  And we explicitly specify `solana-program` above as a local
+# path dependency:
+#
+#     solana-program = { path = "../../sdk/program", version = "=1.16.0" }
+#
+# Unfortunately, Cargo will try to resolve the `spl-token` `solana-program`
+# dependency only using what is available on crates.io.  Crates.io normally
+# contains a previous version of these crates, and we end up with two versions
+# of `solana-program` and `solana-zk-token-sdk` and all of their dependencies in
+# our build tree.
+#
+# If you are developing downstream using non-crates-io solana-program (local or
+# forked repo, or from github rev, eg), duplicate the following patch statements
+# in your Cargo.toml. If you still hit duplicate-type errors with the patch
+# statements in place, run `cargo update -p solana-program` and/or `cargo update
+# -p solana-zk-token-sdk` to remove extraneous versions from your Cargo.lock
+# file.
+#
+# There is a similar override in `programs/sbf/Cargo.toml`.  Please keep both
+# comments and the overrides in sync.
+solana-curve25519 = { path = "../../Repos/agave/curves/curve25519" }
+solana-account-info = { path = "../../Repos/agave/sdk/account-info" }
+solana-borsh = { path = "../../Repos/agave/sdk/borsh" }
+solana-cpi = { path = "../../Repos/agave/sdk/cpi" }
+solana-decode-error = { path = "../../Repos/agave/sdk/decode-error" }
+solana-hash = { path = "../../Repos/agave/sdk/hash" }
+solana-instruction = { path = "../../Repos/agave/sdk/instruction" }
+solana-msg = { path = "../../Repos/agave/sdk/msg" }
+solana-program = { path = "../../Repos/agave/sdk/program" }
+solana-program-entrypoint = { path = "../../Repos/agave/sdk/program-entrypoint" }
+solana-program-error = { path = "../../Repos/agave/sdk/program-error" }
+solana-program-option = { path = "../../Repos/agave/sdk/program-option" }
+solana-program-pack = { path = "../../Repos/agave/sdk/program-pack" }
+solana-pubkey = { path = "../../Repos/agave/sdk/pubkey" }
+solana-sha256-hasher = { path = "../../Repos/agave/sdk/sha256-hasher" }
+solana-zk-sdk = { path = "../../Repos/agave/zk-sdk" }
+solana-rpc-client = { path = "../../Repos/agave/rpc-client" }
