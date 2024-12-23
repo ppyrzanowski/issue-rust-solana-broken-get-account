@@ -1,4 +1,4 @@
-use solana_sdk::{self};
+use solana_sdk::{self, account::Account};
 use solana_rpc_client::rpc_client::RpcClient;
 use solana_account_decoder::{UiAccountEncoding, UiAccount};
 use solana_rpc_client_api::config::RpcAccountInfoConfig;
